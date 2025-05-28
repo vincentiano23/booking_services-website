@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>Book a Trip</h4>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="origin" class="form-label">Origin</label>
+                            <input type="text" class="form-control" id="origin" name="origin" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="destination" class="form-label">Destination</label>
+                            <input type="text" class="form-control" id="destination" name="destination" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="travel_date" class="form-label">Travel Date</label>
+                            <input type="date" class="form-control" id="travel_date" name="travel_date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="travel_time" class="form-label">Travel Time</label>
+                            <input type="time" class="form-control" id="travel_time" name="travel_time" required>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success w-100">Confirm Booking</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-muted">Need help? Contact support.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

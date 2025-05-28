@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start">
+            <h1 class="display-4 fw-bold">Welcome to Kasilver Booking Services</h1>
+            <p class="lead mt-3">Book your travel with ease and efficiency. Join hundreds of happy travelers booking daily trips through our secure, user-friendly platform.</p>
+            <div class="mt-4">
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg me-2">Get Started</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg">Login</a>
+            </div>
+        </div>
+        <div class="col-md-6 mt-5 mt-md-0 text-center">
+            <img src="https://cdn-icons-png.flaticon.com/512/201/201623.png" alt="Booking Illustration" class="img-fluid" style="max-height: 350px;">
+        </div>
+    </div>
+</div>
+
+<section class="bg-light py-5 mt-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Why Choose Us?</h2>
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="bi bi-clock-history display-4 text-primary"></i>
+                        <h5 class="card-title mt-3">Fast Booking</h5>
+                        <p class="card-text">Book your trip in under a minute using our smart booking system.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="bi bi-shield-check display-4 text-success"></i>
+                        <h5 class="card-title mt-3">Secure System</h5>
+                        <p class="card-text">Your information is protected by the latest encryption technology.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="bi bi-people-fill display-4 text-warning"></i>
+                        <h5 class="card-title mt-3">Support Team</h5>
+                        <p class="card-text">Need help? Our support team is always ready to assist you.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

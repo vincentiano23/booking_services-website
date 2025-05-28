@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Receipt</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 14px; }
+        .receipt-box {
+            border: 1px solid #000;
+            padding: 20px;
+        }
+        h2 { text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="receipt-box">
+        <h2>Kasilver Services Receipt</h2>
+        <p><strong>Name:</strong> {{ booking.name }}</p>
+        <p><strong>Travel Date:</strong> {{ booking.travel_date }}</p>
+        <p><strong>Time:</strong> {{ booking.travel_time }}</p>
+        <p><strong>From:</strong> {{ booking.origin }}</p>
+        <p><strong>To:</strong> {{ booking.destination }}</p>
+        <p><strong>Reference ID:</strong> #{{ booking.id }}</p>
+        <hr>
+        <p>Thank you for booking with Kasilver Services!</p>
+    </div>
+</body>
+</html>

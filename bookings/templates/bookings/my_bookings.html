@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>My Bookings</h2>
+    <table class="table table-bordered mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Receipt</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.travel_date }}</td>
+                <td>{{ booking.travel_time }}</td>
+                <td>{{ booking.origin }}</td>
+                <td>{{ booking.destination }}</td>
+                <td><a href="{% url 'generate_receipt' booking.id %}" class="btn btn-sm btn-outline-primary">Download</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No bookings yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

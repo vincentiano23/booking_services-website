@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Welcome , {{ request.user.username }}!</h2>
+    <p>You can now book a trip, view your bookings, and download receipts.</p>
+    <a href="{% url 'book_trip' %}" class="btn btn-success">Book a Trip</a>
+</div>
+{% endblock %}
