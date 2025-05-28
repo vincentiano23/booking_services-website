@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-oqtwl+ye(s!4b*7=t&anu-wdatb)nlu4^y8++c4s=n6wsmwyt0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['smart-booking-p56n.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
