@@ -102,7 +102,14 @@ def create_booking(request):
 # Booking Success Page
 @login_required
 def booking_success(request):
-    return render(request, 'bookings/booking_success.html')
+    booking_id = request.session.get('booking_id')
+    if not booking_id:
+        return redirect('home')  # or show a message
+
+    return render(request, 'bookings/booking_success.html', {
+        'booking_id': booking_id
+    })
+
 
 
 # Show My Bookings (for customers)
