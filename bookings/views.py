@@ -9,10 +9,12 @@ from xhtml2pdf import pisa
 from .forms import BookingForm, CustomUserCreationForm
 from .models import Booking
 
+# Home Page
 def home(request):
     return render(request, 'bookings/home.html')
 
-# Registration View
+
+# User Registration
 def register_user(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -20,25 +22,27 @@ def register_user(request):
             user = form.save()
             login(request, user)
             return redirect_user_dashboard(user)
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
 
-# Role-based Redirect
+# Role-based Dashboard Redirection
 def redirect_user_dashboard(user):
-    if user.is_admin():
-        return redirect('admin_dashboard')
-    elif user.is_worker():
-        return redirect('worker_dashboard')
-    else:
-        return redirect('customer_dashboard')
+    try:
+        if user.is_admin():
+            return redirect('admin_dashboard')
+        elif user.is_worker():
+            return redirect('worker_dashboard')
+        else:
+            return redirect('customer_dashboard')
+    except:
+        return redirect('dashboard')  # fallback in case of missing route names
 
 
-@login_required
-def customer_dashboard(request):
-    return render(request, 'bookings/customer_dashboard.html')
-# Unified Dashboard Routing
+# Unified Dashboard View
 @login_required
 def dashboard(request):
     if request.user.role == 'admin':
@@ -49,39 +53,46 @@ def dashboard(request):
         return redirect('book_trip')
 
 
-# Customer Booking View
+# Customer Dashboard
+@login_required
+def customer_dashboard(request):
+    return render(request, 'bookings/customer_dashboard.html')
+
+
+# Customer Booking Page
 @login_required
 def book_trip(request):
     if request.method == 'POST':
-        travel_date = request.POST['travel_date']
-        travel_time = request.POST['travel_time']
-        origin = request.POST['origin']
-        destination = request.POST['destination']
+        travel_date = request.POST.get('travel_date')
+        travel_time = request.POST.get('travel_time')
+        origin = request.POST.get('origin')
+        destination = request.POST.get('destination')
 
-        # Prevent duplicate booking
-        exists = Booking.objects.filter(
+        # Prevent duplicate bookings
+        if Booking.objects.filter(
             customer=request.user,
             travel_date=travel_date,
             travel_time=travel_time,
             destination=destination
-        ).exists()
-
-        if exists:
+        ).exists():
             messages.error(request, "You already booked this trip.")
             return redirect('book_trip')
 
-        Booking.objects.create(
+        booking = Booking.objects.create(
             customer=request.user,
+            origin=origin,
             destination=destination,
             travel_date=travel_date,
             travel_time=travel_time
         )
+        # Save booking_id in session
+        request.session['booking_id'] = booking.id
         return redirect('booking_success')
 
     return render(request, 'bookings/book_trip.html')
 
 
-# Worker/Admin Create Booking
+# Worker/Admin Booking Creation Page
 @login_required
 def create_booking(request):
     if not request.user.is_worker() and not request.user.is_admin():
@@ -93,9 +104,11 @@ def create_booking(request):
             booking = form.save(commit=False)
             booking.customer = request.user
             booking.save()
+            request.session['booking_id'] = booking.id
             return redirect('booking_success')
     else:
         form = BookingForm()
+    
     return render(request, 'bookings/create_booking.html', {'form': form})
 
 
@@ -104,22 +117,25 @@ def create_booking(request):
 def booking_success(request):
     booking_id = request.session.get('booking_id')
     if not booking_id:
-        return redirect('home')  # or show a message
+        messages.error(request, "No booking found.")
+        return redirect('home')
 
     return render(request, 'bookings/booking_success.html', {
         'booking_id': booking_id
     })
 
 
-
-# Show My Bookings (for customers)
+# Customer Bookings Page
 @login_required
 def my_bookings(request):
-    bookings = Booking.objects.filter(customer=request.user).order_by('-travel_date', '-travel_time')
+    bookings = Booking.objects.filter(
+        customer=request.user
+    ).order_by('-travel_date', '-travel_time')
+
     return render(request, 'bookings/my_bookings.html', {'bookings': bookings})
 
 
-# Generate PDF Receipt
+# Generate Booking Receipt (PDF)
 @login_required
 def generate_receipt(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id, customer=request.user)
@@ -132,4 +148,5 @@ def generate_receipt(request, booking_id):
     pisa_status = pisa.CreatePDF(html, dest=response)
     if pisa_status.err:
         return HttpResponse('Error generating PDF receipt', status=500)
+    
     return response
