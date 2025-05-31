@@ -2,12 +2,14 @@ from django.contrib import admin
 from django.urls import path
 from bookings import views as booking_views
 from django.contrib.auth.views import LogoutView
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('', booking_views.home, name='home'),
     path('admin/', admin.site.urls),
 
     # Registration and Auth
+    path('accounts/login/', RedirectView.as_view(url='/login/', permanent=False)),
     path('register/', booking_views.register_user, name='register'),
     path('logout/', LogoutView.as_view(), name='logout'),
 
