@@ -1,29 +1,31 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-body p-4">
-                    <h3 class="text-center mb-4">Create an Account</h3>
-                    <form method="POST">
-                        {% csrf_token %}
-                        {% for field in form %}
-                            <div class="mb-3">
-                                <label class="form-label">{{ field.label }}</label>
-                                {{ field }}
-                                {% if field.errors %}
-                                    <div class="text-danger small">{{ field.errors|striptags }}</div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                        <button type="submit" class="btn btn-primary w-100">Register</button>
-                        <p class="text-center mt-3">Already have an account?
-                            <a href="{% url 'login' %}">Login</a>
-                        </p>
-                    </form>
-                </div>
+<div class="container min-vh-100 d-flex align-items-center justify-content-center bg-light">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-5">
+                <h2 class="text-center mb-4 fw-bold text-primary">Create an Account</h2>
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ field.label }}</label>
+                            {{ field|add_class:"form-control form-control-lg rounded-3" }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 shadow-sm">
+                        Register
+                    </button>
+                    <p class="text-center mt-4 small">
+                        Already have an account?
+                        <a href="{% url 'login' %}" class="text-decoration-none text-primary fw-medium">Login</a>
+                    </p>
+                </form>
             </div>
         </div>
     </div>
